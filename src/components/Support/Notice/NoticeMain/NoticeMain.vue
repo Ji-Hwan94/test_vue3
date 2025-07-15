@@ -74,7 +74,12 @@ onMounted(() => {
     </table>
     <PageNavigation :total-items="noticeCount" :items-per-page="5" :on-page-change="noticeSearch" />
   </div>
-  <NoticeModal v-if="modalState.isOpen" :detail-id @post-success="noticeSearch()" />
+  <NoticeModal
+    v-if="modalState.isOpen"
+    :detail-id
+    @post-success="noticeSearch()"
+    @un-mounted-modal="detailId = $event"
+  />
 </template>
 
 <style>
