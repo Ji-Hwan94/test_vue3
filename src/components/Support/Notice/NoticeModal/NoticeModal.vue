@@ -1,7 +1,33 @@
 <script setup>
 import { useModalState } from '@/stores/modalState';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+
+const emit = defineEmits(['postSuccess']);
+const { detailId: id } = defineProps({ detailId: { type: Number, default: 0 } });
 
 const modalState = useModalState();
+const formRef = ref();
+
+const handlerInsert = () => {
+  const formData = new FormData(formRef.value);
+
+  axios.post('/api/support/noticeSave.do', formData).then((res) => {
+    if (res.data.result === 'success') {
+      alert('저장되었습니다.');
+      modalState.$patch({ isOpen: false });
+      emit('postSuccess');
+    }
+  });
+};
+
+// const searchDetail = () => {
+//   const param = new URLSearchParams();
+// };
+
+onMounted(() => {
+  console.log(id);
+});
 </script>
 
 <template>
@@ -20,7 +46,7 @@ const modalState = useModalState();
           </div>
         </div>
         <div class="button-container">
-          <button type="button">저장</button>
+          <button type="button" @click="handlerInsert">저장</button>
           <button type="button">삭제</button>
           <button type="button" @click="modalState.$patch({ isOpen: false })">나가기</button>
         </div>
